@@ -1,12 +1,14 @@
 # The bambini-python conda environment
-The idea is to make the python environment compatible to the python environment used in the RHEL installer named Anaconda[^Anaconda]. The RHEL installer Anaconda uses the `blivet` python module for the partitioning. The ansible `linux_system_roles` collection `storage` role also makes use of the python `blivet` module. But unfortunatly this role does not support creation of boot partitions. For this reason the conda environment is supplied with the parted binary, and a seperate `bambini` collection plugin has been written.
 
+The bambini-python environment is a conda environment with all prerequisite python modules available to install a machine with an OS.
+A prebuild `bambini-python.squashfs` is available from [here]()
+## Installing conda
 
-The below steps describe the steps to build a conda environment packed in a squashfs to be included in the initramfs using the `dracut-bambini` dracut module. This conda python environment can be used with the `ansible parted module`.
+On the following website is described how to install conda: https://conda-forge.org/download/
 
-
-## Conda prerequisites
-For building the bambini-python environment the `geertsky` anaconda channel needs to be added
+## Conda prerequisite - geertsky channel
+For building the bambini-python environment the `geertsky` anaconda channel needs as addition to the `conda-forge` channel.
+This can be done with the following command:
 
 ```bash
 conda config --add channels geertsky
@@ -22,30 +24,45 @@ channels:
 report_errors: False
 ```
 
-To test if the channel works we can issue a `conda search parted` which should return:
+As an additional test we can issue a `conda search parted` which should return:
 
 ```
 Loading channels: done
 # Name                       Version           Build  Channel
-parted                           3.6      h9bf148f_0  geertsky
+parted                           3.7      h53a3f9b_0  geertsky
+```
+
+## Conda prerequisite - conda-pack
+Additionally, the `conda-pack` conda package needs to be installed in the base environment.
+This can be done using the following command:
+
+```bash
+conda install -n base conda-pack
 ```
 
 ## Building the bambini-parted environment
 
-The recipes for the conda modules are stored in the directory `conda-recipes` of the `dracut-bambini` project. We can build these conda modules separately using `conda build <recipename>`. This however is only needed for customizing the conda modules. Both the `bambini-parted` conda python environment as well as the conda modules have been uploaded to the `geertsky` anaconda channel.
+In the dracut-bambini repository there is a conda environment file which can be use to build the bambini-parted environment.
+Using the following command we can build the `bambini-python` environment:
 
-Because of that, to build the conda bambini-parted python environment we can issue a:
-
+```bash
+conda create -f dracut-bambini/conda-recipes/bambini-parted-environment.yml
 ```
-conda env create -n bambini-python -f bambini-parted-environment.yml 
+
+## Packing the bambini-python environment
+
+To pack the `ansible-bambini` we need to use the following command:
+
+```bash
+conda-pack --compress-level 9 -j 8  --dest-prefix /local/conda/envs/bambini-python --format squashfs -n bambini-python
 ```
+_`--compression-level 9` is needed to use xz compression. The only one supported by RHEL8_
+_`--dest-prefix /local/conda/envs/bambini-python` is needed as the environment gets mounted under `/local/conda/envs/bambini-python` in the initrd._
+_`--format squashfs` We want the environment packed in a squashfs.
 
-## Packing the environment for dracut-bambini
-*For packing the conda environment, the conda-pack package needs to be installed in the conda base environment*
+Once `conda-pack` is finished, we have a file `bambini-parted.squashfs` containing the bambini-python environment.
+This packed environment needs to be available in the dracut module directory of `dracut-bambini`. This is `/lib/dracut/modules.d/94bambini`
 
-Once we have build the conda environment, we can pack it by issuing the following command in the dracut modules directory of `bambini`
-
-```
-cd /lib/dracut/modules.d/*bambini/
-conda-pack -n bambini-python --format squashfs
+```bash
+sudo mv bambini-parted.squashfs /lib/dracut/modules.d/94bambini
 ```
