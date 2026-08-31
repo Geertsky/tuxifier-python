@@ -1,0 +1,26 @@
+package:
+  name: libbytesize
+  version: 2.10
+
+source:
+  url: https://github.com/storaged-project/libbytesize/releases/download/2.10/libbytesize-2.10.tar.gz
+  md5: 2ed2ad2e44c4017f016e1ca55be83e62
+requirements:
+  build:
+    - {{ compiler('c') }}
+  host:
+    - gmp
+    - mpfr
+    - pcre2
+    - pygments
+    - six
+about:
+  home: https://github.com/storaged-project/libbytesize
+  summary: The goal of this project is to provide a tiny library that would facilitate the common operations with sizes in bytes.
+  license: LGPL-2.1
+  license_file:
+    - LICENSE
+
+extra:
+  recipe-maintainers:
+    - Geertsky
