@@ -1,0 +1,37 @@
+package:
+  name: cryptsetup
+  version: "2.7.2"
+
+source:
+  url: https://www.kernel.org/pub/linux/utils/cryptsetup/v2.7/cryptsetup-2.7.2.tar.xz
+  md5sum: d13fa531c37f05824d67ae92f3c6f73b
+
+
+requirements:
+  host:
+    - json-c
+    - libdevmapper
+    - libgcrypt
+    - libssh
+    - libtool
+    - libxcrypt1
+    - lvm2
+    - openssl
+    - pkgconfig
+    - popt
+    - util-linux=2.39.3=py312h40d0619_1
+  build:
+    - autoconf
+    - automake
+    - {{ compiler('c') }}
+    - kernel-headers_linux-64
+    - libtool
+
+about:
+  home: https://github.com/mbroz/cryptsetup
+  license: LGPLv2.1
+  doc_url: https://gitlab.com/cryptsetup/cryptsetup#documentation
+
+extra:
+  recipe-maintainers:
+    - Geertsky
