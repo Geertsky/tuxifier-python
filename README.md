@@ -1,7 +1,7 @@
 # The bambini-python conda environment
 
 The bambini-python environment is a conda environment with all prerequisite python modules available to install a machine with an OS.
-A prebuild `bambini-python.squashfs` is available from [here]()
+A prebuild `bambini-python.squashfs` is available from [here](https://verweggistan.eu/bambini-python.squashfs)
 ## Installing conda
 
 On the following website is described how to install conda: https://conda-forge.org/download/
