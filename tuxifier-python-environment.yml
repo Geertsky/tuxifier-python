@@ -1,4 +1,4 @@
-name: bambini-python
+name: tuxifier-python
 channels:
   - geertsky
   - conda-forge

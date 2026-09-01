@@ -11,7 +11,7 @@ requirements:
     - {{ compiler('c') }}
     - {{ stdlib('c') }}
 about:
-  home: https://github.com/Geertsky/dracut-bambini
+  home: https://github.com/dosfstools/dosfstools
   summary: dosfstools consists of the programs mkfs.fat, fsck.fat and fatlabel to create, check and label file systems of the FAT family.
   license:  GPL-3.0 license
   license_file:
