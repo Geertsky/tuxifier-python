@@ -1,11 +1,5 @@
 #!/bin/bash
-./configure --prefix=${PREFIX} --disable-rpath --disable-ssh-token --disable-asciidoc #--enable-static --enable-shared=no
+./configure --help
+./configure --prefix=${PREFIX} --sbindir=${PREFIX}/bin --disable-ssh-token --disable-asciidoc #--enable-static --enable-shared=no
 make
 make install
-# Copy the [de]activate scripts to $PREFIX/etc/conda/[de]activate.d.
-# This will allow them to be run on environment activation.
-for CHANGE in "activate" "deactivate"
-do
-    mkdir -p "${PREFIX}/etc/conda/${CHANGE}.d"
-    cp "${RECIPE_DIR}/${CHANGE}.sh" "${PREFIX}/etc/conda/${CHANGE}.d/${PKG_NAME}_${CHANGE}.sh"
-done
