@@ -1,5 +1,5 @@
 {% set name = "blivet" %}
-{% set version = "3.10.0" %}
+{% set version = "3.14.1" %}
 
 package:
   name: {{ name|lower }}
@@ -7,22 +7,25 @@ package:
 
 source:
   url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/blivet-{{ version }}.tar.gz
-  sha256: 37f6d79e644872f24ce363aaffbe03b0faecf97dd1dbeb77971f562a1a14a196
+  sha256: 782894492153bae67a8219df08fd18c92db3eca5bf8a17ac8e3c7c32a24d6758
 
 build:
   noarch: python
   script: {{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
   number: 0
-
 requirements:
   host:
     - pip
+    - setuptools
+    - wheel
     - python
   run:
-    - libblockdev 
-    - libbytesize 
-    - libgirepository
+    - libblockdev
+    - libbytesize
+    - dasbus
+    - packaging
     - lvm2
+    - util-linux
     - pygobject
     - pyparted
     - python
